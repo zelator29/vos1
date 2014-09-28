@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+
+        <link href="js/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="js/bootstrap/css/bootstrap-theme.css" rel="stylesheet" type="text/css">
+        <link href="js/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css">
+        <link href="css/vos.css" rel="stylesheet" type="text/css">
+
+    </head>
+
+    <body ng-app="VOS1" ng-controller="searchController">
+        <div id="searchTab" ng-show="searchActive">
+            <div class="text-center title-wrapper">
+                <h2 class="page-title">Pittsburgh Cares</h2>
+                <h3 class="page-subtitle">Fill in the fields below and hit 'Search' to find opportunities</h3>
+            </div>
+
+            <form name="frmSearch" id="frmSearch" method="GET" ng-submit="submit()">
+                <div class="container-fluid">
+                    <div class="row top-buffer">
+                        <div class="inner col-12" id="search">
+                            <input type="text" class="form-control typeahead" 
+                                   ng-model="terms"
+                                   placeholder="Keyword or area of interest">
+                        </div>
+                    </div>
+                    <div class="row top-buffer">
+                        <div class="inner col-6">
+                            <input type="text" class="form-control" 
+                                   data-provide="datepicker"
+                                   ng-model="fromDate"
+                                   id="from-date" placeholder="From this date">
+                        </div>
+                        <div class="inner col-6">
+                            <input type="text" class="form-control" 
+                                   data-provide="datepicker"
+                                   ng-model="toDate"
+                                   id="to-date" placeholder="To this date">
+                        </div>
+                    </div>
+                    <div class="row top-buffer">
+                        <div class="inner col-6">
+                            <input type="text" class="form-control" 
+                                   ng-model="zip"
+                                   id="zip-code" placeholder="Enter ZIP code">
+                        </div>
+                        <div class="inner col-6">
+                            <input type="text" class="form-control" 
+                                   ng-model="distance"
+                                   id="distance" placeholder="Distance">
+                        </div>
+                    </div>
+                    <div class="row top-buffer"></div>
+                    <div class="row top-buffer">
+                        <div class="inner offset-4 col-4" style="margin-top: 30px;">
+                            <button id="go"  class="btn btn-primary form-control" type="submit">
+                                Search<span class="glyphicon glyphicon-search" style="margin-left: 12px;"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <img class="unselectable" src="img/pghcareslogo.png" alt="Pittsburgh Cares">
+            </div>
+        </div>
+        <div id="resultsTab" ng-show="!searchActive">
+            <form name="frmResults" id="frmResults" method="GET" ng-submit="back()">
+                <div class="container-fluid">
+                    <div class="row top-buffer">
+                        <div class="inner offset-4 col-4" style="margin-top: 30px;">
+                            <button id="return"  class="btn btn-warning form-control" type="submit">
+                            <span class="glyphicon glyphicon-arrow-left"></span> Back to Search
+                            </button>
+                        </div>
+                    </div>
+            </form>
+        </div>
+        <script src="js/jquery/jquery.js"></script>
+        <script src="js/angular/angular.js"></script>
+        <script src="js/bootstrap/js/bootstrap.js"></script>
+        <script src="js/typeahead/typeahead.bundle.js"></script>
+        <script src="js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script src="js/angular-ui-bootstrap/ui-bootstrap.js"></script>
+        <script src="js/matcher.js"></script>
+
+        <script>
+            angular.module('VOS1', [])
+                    .controller(searchController);
+
+            function searchController($scope) {
+                $scope.terms = '';
+                $scope.fromDate;
+                $scope.toDate;
+                $scope.zip;
+                $scope.distance;
+                $scope.searchActive = true;
+                
+                $scope.submit = function() {
+                    $scope.searchActive = false;
+                    console.log("Submit!  " + $scope.searchActive);
+                };
+                
+                $scope.back = function() {
+                    $scope.searchActive = true;
+                    console.log("Back!   " + $scope.searchActive);
+                };
+            };
+        </script>
+    </body>
+</html>

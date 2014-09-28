@@ -1,0 +1,148 @@
+/* 
+    Created on : Sep 28, 2014, 10:44:44 AM
+    Author     : Mitch Goldstein, Pittsburgh Cares
+*/
+
+@font-face {
+    font-family: Rockwell;
+    src: url(../fonts/ROCK.TTF);
+}
+
+body input table {
+    font-family: Rockwell;
+}
+
+strong.tt-highlight {
+    color: red;
+    font-weight: normal;
+    text-decoration: underline;
+}
+
+.tt-suggestion {
+    padding: 3px 3px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.tt-suggestion.tt-cursor { 
+    color: #fff;
+    background-color: #2481d8;
+
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
+.title-wrapper {
+    display: block;
+    clear: both;
+    background: #fff;
+    //padding: 5px 0 10px;
+}
+
+.tt-dropdown-menu {
+    font-family: Rockwell;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #f2f2f2;
+    cursor: default;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+input {
+    width: 100%;
+}
+
+input[type="text"] {
+    font-family: Rockwell;
+}
+
+div > img {
+    width: 40%;
+    height: 40%;
+    display: block;
+    margin-top: 80px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page-title {
+    display: block;
+    text-align: center;
+    font-family: Rockwell;
+    font-size: 22px;
+    line-height: 100%;
+    font-weight: normal;
+    margin-top: 10px;
+    color: #2481d8;
+}
+
+.page-subtitle {
+    display: block;
+    text-align: center;
+    font-family: Rockwell;
+    font-size: 13px;
+    line-height: 100%;
+    font-weight: normal;
+    margin-top: 10px;
+    color: black;
+}        
+
+.top-buffer {
+    margin-top: 3px;
+}
+
+.form-control {
+    width: 100%;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.col-12, .col-6, .col-4 {
+    float: left;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.col-12 {
+    width: 100%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-4 {
+    width: 33.33333333%;
+}
+
+.offset-4 {
+    margin-left: 33.33333333%;
+}
+
+.form-control:-ms-input-placeholder {
+    color: #ccc;
+}
+
+.form-control::-moz-placeholder {
+    color: #ccc;
+}
+
+.form-control::-webkit-input-placeholder {
+    color: #ccc;
+}
+
+.twitter-typeahead {
+    width: 100%;
+}
+
+// Make the image unselectable
+.unselectable {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none; 
+    -webkit-user-drag: none;
+}
