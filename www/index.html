@@ -12,7 +12,19 @@
 
     </head>
 
+
+
     <body ng-app="VOS1" ng-controller="searchController">
+    
+        <script src="js/jquery/jquery.js"></script>
+        <script src="js/angular/angular.js"></script>
+        <script src="js/bootstrap/js/bootstrap.js"></script>
+        <script src="js/typeahead/typeahead.bundle.js"></script>
+        <script src="js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script src="js/angular-ui-bootstrap/ui-bootstrap.js"></script>
+        <script src="js/matcher.js"></script>
+        <script src="js/test-data.js"></script>
+            
         <div id="searchTab" ng-show="searchActive">
             <div class="text-center title-wrapper">
                 <h2 class="page-title">Pittsburgh Cares</h2>
@@ -81,13 +93,7 @@
                 </div>
             </form>
         </div>
-        <script src="js/jquery/jquery.js"></script>
-        <script src="js/angular/angular.js"></script>
-        <script src="js/bootstrap/js/bootstrap.js"></script>
-        <script src="js/typeahead/typeahead.bundle.js"></script>
-        <script src="js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-        <script src="js/angular-ui-bootstrap/ui-bootstrap.js"></script>
-        <script src="js/matcher.js"></script>
+
 
         <script>
             angular.module('VOS1', [])
@@ -106,7 +112,9 @@
                 
                 $scope.submit = function() {
                     console.log("Submit!  " + $scope.searchActive);
-                    doQuery();
+                    $scope.data = testData;
+                    console.log($scope.data);
+                    //doQuery();
                 };
                 
                 $scope.back = function() {
@@ -114,30 +122,32 @@
                     console.log("Back!   " + $scope.searchActive);
                 };
                 
-                function doQuery() {
-                    $http.get("http://api2.allforgood.org/api/volopps?key=hoc0016-mobile&type=all&merge=0&output=json-hoc&vol_loc=15222&vol_dist=5&callback=JSON_CALLBACK").
+                /*
+                var query = "http://api2.allforgood.org/api/volopps?key=hoc0016-mobile&type=all&merge=0&output=json-hoc&vol_loc=15222&vol_dist=5&callback=JSON_CALLBACK";
+                $http.jsonp(query).
                         success(function(data, status, headers, config) {
                             querySuccess(data);
                         }).
                         error(function(data, status, headers, config) {
+                            console.log('data: ' + data);
                             console.log('status:' + status);
                             console.log('headers:' + headers);
                             console.log('config:' + config);
                             queryFailure(status);
                         });
-                }
-                
-                
+                */
+        
                 function querySuccess(data) {
                     $scope.searchActive = false;
                     alert('Success!');
-                }
+                };
 
                 function queryFailure(status) {
                     $scope.searchActive = true;
                     alert('Failure: ' + status);
-                }
+                };
             };
+                
         </script>
     </body>
 </html>
