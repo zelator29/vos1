@@ -2,7 +2,6 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title></title>
 
@@ -79,6 +78,7 @@
                             </button>
                         </div>
                     </div>
+                </div>
             </form>
         </div>
         <script src="js/jquery/jquery.js"></script>
@@ -92,24 +92,51 @@
         <script>
             angular.module('VOS1', [])
                     .controller(searchController);
-
-            function searchController($scope) {
+ 
+            function searchController($scope, $http) {
+                $http.defaults.useXDomain = true;
+                
                 $scope.terms = '';
                 $scope.fromDate;
                 $scope.toDate;
                 $scope.zip;
                 $scope.distance;
                 $scope.searchActive = true;
+                $scope.data = '';
                 
                 $scope.submit = function() {
-                    $scope.searchActive = false;
                     console.log("Submit!  " + $scope.searchActive);
+                    doQuery();
                 };
                 
                 $scope.back = function() {
                     $scope.searchActive = true;
                     console.log("Back!   " + $scope.searchActive);
                 };
+                
+                function doQuery() {
+                    $http.get("http://api2.allforgood.org/api/volopps?key=hoc0016-mobile&type=all&merge=0&output=json-hoc&vol_loc=15222&vol_dist=5&callback=JSON_CALLBACK").
+                        success(function(data, status, headers, config) {
+                            querySuccess(data);
+                        }).
+                        error(function(data, status, headers, config) {
+                            console.log('status:' + status);
+                            console.log('headers:' + headers);
+                            console.log('config:' + config);
+                            queryFailure(status);
+                        });
+                }
+                
+                
+                function querySuccess(data) {
+                    $scope.searchActive = false;
+                    alert('Success!');
+                }
+
+                function queryFailure(status) {
+                    $scope.searchActive = true;
+                    alert('Failure: ' + status);
+                }
             };
         </script>
     </body>
