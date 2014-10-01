@@ -83,6 +83,18 @@
         <div id="resultsTab" ng-show="!searchActive">
             <form name="frmResults" id="frmResults" method="GET" ng-submit="back()">
                 <div class="container-fluid">
+                    <table class="table table-bordered">
+                        <tfoot>
+                            <tr>
+                                <td>!!!</td>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr ng-repeat="item in data.items">
+                                <td>{{item.title}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <div class="row top-buffer">
                         <div class="inner offset-4 col-4" style="margin-top: 30px;">
                             <button id="return"  class="btn btn-warning form-control" type="submit">
@@ -96,9 +108,16 @@
 
 
         <script>
-            angular.module('VOS1', [])
+            var app = angular.module('VOS1', [])
                     .controller(searchController);
  
+            app.directive('opportunity', function() {
+                return {
+                    restrict: 'E',
+                    templateUrl: 'opportunity-template.html'
+                };
+            });
+
             function searchController($scope, $http) {
                 $http.defaults.useXDomain = true;
                 
@@ -112,8 +131,10 @@
                 
                 $scope.submit = function() {
                     console.log("Submit!  " + $scope.searchActive);
-                    $scope.data = testData;
+                    $scope.data = angular.fromJson(testData);
                     console.log($scope.data);
+                    // temp!
+                    $scope.searchActive = false;
                     //doQuery();
                 };
                 

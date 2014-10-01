@@ -1,4 +1,4 @@
-var testData = {
+{
     "lastBuildDate": "Tuesday, 30 September 2014 23:09:21 +0000",
     "version": "2.0",
     "language": "en-us",
@@ -9095,4 +9095,4 @@ var testData = {
             "Yesterday Today and Tomorrow": 1
         }
     }
-};
+}
