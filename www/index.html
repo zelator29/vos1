@@ -8,22 +8,125 @@
         <link href="js/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="js/bootstrap/css/bootstrap-theme.css" rel="stylesheet" type="text/css">
         <link href="js/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css">
+        <link href="js/jqwidgets/styles/jqx.base.css" rel="stylesheet" type="text/css"/>
+        <link href="js/jqwidgets/styles/jqx.bootstrap.css" rel="stylesheet" type="text/css"/>
         <link href="css/vos.css" rel="stylesheet" type="text/css">
+        
+                <script src="js/jquery/jquery.js"></script>
+        <script src="js/angular/angular.js"></script>
+        <script src="js/bootstrap/js/bootstrap.js"></script>
+        <script src="js/typeahead/typeahead.bundle.js"></script>
+        <script src="js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script src="js/jqwidgets/jqxcore.js"></script>
+        <script src="js/jqwidgets/jqxdata.js"></script>
+        <script src="js/jqwidgets/jqxbuttons.js"></script>
+        <script src="js/jqwidgets/jqxscrollbar.js"></script>
+        <script src="js/jqwidgets/jqxlistbox.js"></script>
+        <script src="js/jqwidgets/jqxangular.js"></script>
+        <script src="js/jqwidgets/scripts/demos.js"></script>
+        <script src="js/matcher.js"></script>
+        <script src="js/test-data.js"></script>
+        <script>
+            var app = angular.module('VOS1', ["jqwidgets"])
+                    .controller(searchController);
+ 
+            function searchController($scope, $http) {
+                $http.defaults.useXDomain = true;
+                
+                $scope.terms = '';
+                $scope.fromDate;
+                $scope.toDate;
+                $scope.zip;
+                $scope.distance;
+                $scope.searchActive = false;
+                $scope.data = angular.fromJson(testData);
+                $scope.titles = [];
+                
+                for (var i = 0; i < $scope.data.items.length; i++) {
+                    $scope.titles.push($scope.data.items[i].title);
+                }
+                $scope.selectedValue = $scope.titles[0];                
+                
+                $scope.submit = function() {
+                    console.log("Submit!  " + $scope.searchActive);
 
+                    $scope.searchActive = false;
+                    //doQuery();
+                };
+                
+                $scope.back = function() {
+                    $scope.searchActive = true;
+                    console.log("Back!   " + $scope.searchActive);
+                };
+                
+               $scope.listBoxSettings =
+                {
+                    theme: 'bootstrap',
+                    width: '100%',
+                    height: 300,
+                    itemHeight: 50,
+                    source: $scope.titles
+                };
+        
+                $scope.selectedValue = {};
+
+                var what = $('#jqxListBox');
+                $('#jqxListBox').jqxListBox({renderer: function(index, label, value) {
+                    return $scope.renderer(index, label, value);
+
+                }});
+
+                $scope.renderer = function(index, label, value) {
+                    if (!isNumeric(index)) {
+                        return '<span></span>';
+                    }
+                    var item = $scope.data.items[index];
+                    var table = '<table><tr><td>' + 
+                            item.title + '</td></tr>' +
+                            '<tr><td>' + item.description +
+                            '</td></tr></table>';
+                    return table;                    
+                };
+        
+        
+                /*
+                var query = "http://api2.allforgood.org/api/volopps?key=hoc0016-mobile&type=all&merge=0&output=json-hoc&vol_loc=15222&vol_dist=5&callback=JSON_CALLBACK";
+                $http.jsonp(query).
+                        success(function(data, status, headers, config) {
+                            querySuccess(data);
+                        }).
+                        error(function(data, status, headers, config) {
+                            console.log('data: ' + data);
+                            console.log('status:' + status);
+                            console.log('headers:' + headers);
+                            console.log('config:' + config);
+                            queryFailure(status);
+                        });
+                */
+        
+                function isNumeric(n) {
+                    return !isNaN(parseFloat(n)) && isFinite(n);
+                }
+                
+                function querySuccess(data) {
+                    $scope.searchActive = false;
+                    alert('Success!');
+                };
+
+                function queryFailure(status) {
+                    $scope.searchActive = true;
+                    alert('Failure: ' + status);
+                };
+            };
+                
+        </script>        
     </head>
 
 
 
     <body ng-app="VOS1" ng-controller="searchController">
-    
-        <script src="js/jquery/jquery.js"></script>
-        <script src="js/angular/angular.js"></script>
-        <script src="js/bootstrap/js/bootstrap.js"></script>
-        <script src="js/typeahead/typeahead.bundle.js"></script>
-        <script src="js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-        <script src="js/angular-ui-bootstrap/ui-bootstrap.js"></script>
-        <script src="js/matcher.js"></script>
-        <script src="js/test-data.js"></script>
+              
+
             
         <div id="searchTab" ng-show="searchActive">
             <div class="text-center title-wrapper">
@@ -83,19 +186,11 @@
         <div id="resultsTab" ng-show="!searchActive">
             <form name="frmResults" id="frmResults" method="GET" ng-submit="back()">
                 <div class="container-fluid">
-                    <table class="table table-bordered">
-                        <tfoot>
-                            <tr>
-                                <td>!!!</td>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                            <tr ng-repeat="item in data.items">
-                                <td>{{item.title}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="row top-buffer">
+                    <div id='resultsList'>
+                        <p><b>Selected Item: </b>{{selectedValue}}</p>
+                        <jqx-list-box id="jqxListBox" ng-model="selectedValue" jqx-settings="listBoxSettings"></jqx-list-box>
+                    </div>
+               <div class="row top-buffer">
                         <div class="inner offset-4 col-4" style="margin-top: 30px;">
                             <button id="return"  class="btn btn-warning form-control" type="submit">
                             <span class="glyphicon glyphicon-arrow-left"></span> Back to Search
@@ -107,68 +202,6 @@
         </div>
 
 
-        <script>
-            var app = angular.module('VOS1', [])
-                    .controller(searchController);
- 
-            app.directive('opportunity', function() {
-                return {
-                    restrict: 'E',
-                    templateUrl: 'opportunity-template.html'
-                };
-            });
 
-            function searchController($scope, $http) {
-                $http.defaults.useXDomain = true;
-                
-                $scope.terms = '';
-                $scope.fromDate;
-                $scope.toDate;
-                $scope.zip;
-                $scope.distance;
-                $scope.searchActive = true;
-                $scope.data = '';
-                
-                $scope.submit = function() {
-                    console.log("Submit!  " + $scope.searchActive);
-                    $scope.data = angular.fromJson(testData);
-                    console.log($scope.data);
-                    // temp!
-                    $scope.searchActive = false;
-                    //doQuery();
-                };
-                
-                $scope.back = function() {
-                    $scope.searchActive = true;
-                    console.log("Back!   " + $scope.searchActive);
-                };
-                
-                /*
-                var query = "http://api2.allforgood.org/api/volopps?key=hoc0016-mobile&type=all&merge=0&output=json-hoc&vol_loc=15222&vol_dist=5&callback=JSON_CALLBACK";
-                $http.jsonp(query).
-                        success(function(data, status, headers, config) {
-                            querySuccess(data);
-                        }).
-                        error(function(data, status, headers, config) {
-                            console.log('data: ' + data);
-                            console.log('status:' + status);
-                            console.log('headers:' + headers);
-                            console.log('config:' + config);
-                            queryFailure(status);
-                        });
-                */
-        
-                function querySuccess(data) {
-                    $scope.searchActive = false;
-                    alert('Success!');
-                };
-
-                function queryFailure(status) {
-                    $scope.searchActive = true;
-                    alert('Failure: ' + status);
-                };
-            };
-                
-        </script>
     </body>
 </html>
