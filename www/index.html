@@ -63,7 +63,7 @@
                 {
                     theme: 'bootstrap',
                     width: '100%',
-                    height: 300,
+                    height: '100%',
                     itemHeight: 50,
                     source: $scope.titles
                 };
@@ -125,17 +125,18 @@
 
 
     <body ng-app="VOS1" ng-controller="searchController">
-              
-
-            
-        <div id="searchTab" ng-show="searchActive">
+        <div id="demoContainer" class="device-android">
+        <div id="container" class="device-android-container">
+        <div id="searchTab" ng-show="searchActive" style="background: white;">
             <div class="text-center title-wrapper">
                 <h2 class="page-title">Pittsburgh Cares</h2>
-                <h3 class="page-subtitle">Fill in the fields below and hit 'Search' to find opportunities</h3>
+                <h3 class="page-subtitle">Fill in the fields below and hit</h3>
+                <h3 class="page-subtitle"> 'Search' to find opportunities</h3>
+                <div class='top-buffer'></div>
             </div>
 
-            <form name="frmSearch" id="frmSearch" method="GET" ng-submit="submit()">
-                <div class="container-fluid">
+            <div class="container-fluid">
+               <form name="frmSearch" id="frmSearch" method="GET" ng-submit="submit()">
                     <div class="row top-buffer">
                         <div class="inner col-12" id="search">
                             <input type="text" class="form-control typeahead" 
@@ -177,31 +178,35 @@
                             </button>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
             <div>
                 <img class="unselectable" src="img/pghcareslogo.png" alt="Pittsburgh Cares">
+                <h3 class="page-subtitle top-buffer">Pittsburgh Cares</h3>
+                <h4 class="address">3505 Butler St.</h4>
+                <h4 class="address">Pittsburgh, PA 15201</h4>
+                <h4 class="address">(412) 471-2114</h4>
+                <h5 class="copyright">&copy;2014 - All Rights Reserved</h5>
             </div>
         </div>
-        <div id="resultsTab" ng-show="!searchActive">
-            <form name="frmResults" id="frmResults" method="GET" ng-submit="back()">
-                <div class="container-fluid">
-                    <div id='resultsList'>
+        <div id="resultsTab" class="fill" ng-show="!searchActive" style="width: 100%; height: 100%; min-height: 100%;">
+            <div class="container-fluid" class='fill'>
+                <form name="frmResults" id="frmResults" method="GET" ng-submit="back()">
+                    <div id='resultsList' class='fill'>
                         <p><b>Selected Item: </b>{{selectedValue}}</p>
                         <jqx-list-box id="jqxListBox" ng-model="selectedValue" jqx-settings="listBoxSettings"></jqx-list-box>
                     </div>
-               <div class="row top-buffer">
-                        <div class="inner offset-4 col-4" style="margin-top: 30px;">
+                   <div class="row top-buffer">
+                        <div class="inner offset-4 col-4" style="margin-top: 30px; height: 10%;">
                             <button id="return"  class="btn btn-warning form-control" type="submit">
                             <span class="glyphicon glyphicon-arrow-left"></span> Back to Search
                             </button>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-
-
-
+        </div>
+        </div>
     </body>
 </html>
