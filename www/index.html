@@ -12,7 +12,7 @@
         <link href="js/jqwidgets/styles/jqx.bootstrap.css" rel="stylesheet" type="text/css"/>
         <link href="css/vos.css" rel="stylesheet" type="text/css">
         
-                <script src="js/jquery/jquery.js"></script>
+        <script src="js/jquery/jquery.js"></script>
         <script src="js/angular/angular.js"></script>
         <script src="js/bootstrap/js/bootstrap.js"></script>
         <script src="js/typeahead/typeahead.bundle.js"></script>
@@ -26,6 +26,7 @@
         <script src="js/jqwidgets/scripts/demos.js"></script>
         <script src="js/matcher.js"></script>
         <script src="js/test-data.js"></script>
+
         <script>
             var app = angular.module('VOS1', ["jqwidgets"])
                     .controller(searchController);
@@ -67,23 +68,21 @@
                     itemHeight: 50,
                     source: $scope.titles
                 };
-        
-                $scope.selectedValue = {};
 
-                var what = $('#jqxListBox');
                 $('#jqxListBox').jqxListBox({renderer: function(index, label, value) {
                     return $scope.renderer(index, label, value);
-
                 }});
 
                 $scope.renderer = function(index, label, value) {
                     if (!isNumeric(index)) {
-                        return '<span></span>';
+                        return '<span>???</span>';
                     }
                     var item = $scope.data.items[index];
-                    var table = '<table><tr><td>' + 
+                    var table = '<table><tr><td style="word-wrap: break-word;">' + 
                             item.title + '</td></tr>' +
-                            '<tr><td>' + item.description +
+                            '<tr><td style="">' + 
+                            item.city + ', ' + item.region.toUpperCase() +
+                            ' ' + item.postalCode;
                             '</td></tr></table>';
                     return table;                    
                 };
@@ -121,8 +120,6 @@
                 
         </script>        
     </head>
-
-
 
     <body ng-app="VOS1" ng-controller="searchController">
         <div id="demoContainer" class="device-android">
@@ -189,22 +186,22 @@
                 <h5 class="copyright">&copy;2014 - All Rights Reserved</h5>
             </div>
         </div>
-        <div id="resultsTab" class="fill" ng-show="!searchActive" style="width: 100%; height: 100%; min-height: 100%;">
-            <div class="container-fluid" class='fill'>
-                <form name="frmResults" id="frmResults" method="GET" ng-submit="back()">
-                    <div id='resultsList' class='fill'>
-                        <p><b>Selected Item: </b>{{selectedValue}}</p>
-                        <jqx-list-box id="jqxListBox" ng-model="selectedValue" jqx-settings="listBoxSettings"></jqx-list-box>
+        <div id="resultsTab" class="fillpad" ng-show="!searchActive" style="width: 100%; height: 100%; min-height: 100%;">
+            <form name="frmResults" id="frmResults" method="GET" ng-submit="back()" class='fill'>
+                <div style="height: 10%;">
+                    {{ selectedValue }}
+                </div>
+                <div id='resultsList' class='fill' style="height: 80%;">
+                    <jqx-list-box id="jqxListBox" ng-model="titles" jqx-settings="listBoxSettings"/>
+                </div>
+               <div class="row top-buffer">
+                    <div class="inner offset-3 col-6" style="margin-top: 10px; height: 10%;">
+                        <button id="return"  class="btn btn-warning form-control" type="submit">
+                        <span class="glyphicon glyphicon-arrow-left"></span> Back to Search
+                        </button>
                     </div>
-                   <div class="row top-buffer">
-                        <div class="inner offset-4 col-4" style="margin-top: 30px; height: 10%;">
-                            <button id="return"  class="btn btn-warning form-control" type="submit">
-                            <span class="glyphicon glyphicon-arrow-left"></span> Back to Search
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
         </div>
         </div>
