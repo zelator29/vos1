@@ -32,8 +32,11 @@
                     .controller(searchController);
  
             function searchController($scope, $http) {
-                $http.defaults.useXDomain = true;
+                // Set up the typeahead controller for 
+                // the keyword search
+                initTypeahead();
                 
+                // Initialize controller scope variables
                 $scope.terms = '';
                 $scope.fromDate;
                 $scope.toDate;
@@ -62,10 +65,11 @@
                 
                $scope.listBoxSettings =
                 {
+                    enableHover: false,
                     theme: 'bootstrap',
                     width: '100%',
                     height: '100%',
-                    itemHeight: 50,
+                    itemHeight: 60,
                     source: $scope.titles
                 };
 
@@ -74,16 +78,27 @@
                 }});
 
                 $scope.renderer = function(index, label, value) {
+/*
                     if (!isNumeric(index)) {
                         return '<span>???</span>';
                     }
+*/
                     var item = $scope.data.items[index];
-                    var table = '<table><tr><td style="word-wrap: break-word;">' + 
-                            item.title + '</td></tr>' +
-                            '<tr><td style="">' + 
-                            item.city + ', ' + item.region.toUpperCase() +
-                            ' ' + item.postalCode;
-                            '</td></tr></table>';
+                    var table = 
+                        '<table style="width: 280px;">' + 
+                            '<tr>' +
+                                '<td rowspan="3" style="width: 30px;">' + 
+                                '<span class="glyphicon glyphicon-heart" style="margin-left: 4px;"></span>' +
+                                '</td>' +
+                                '<td rowspan="2" style="white-space: normal;">' + item.title + '</td>' +
+                            '</tr><tr></tr>' + 
+                            '<tr>' + 
+                                '<td rowspan="1"><b>' + 
+                                    item.city + ', ' + item.region.toUpperCase() +
+                                    ' ' + item.postalCode + 
+                                '</b></td>' +
+                            '</tr>' + 
+                        '</table>';
                     return table;                    
                 };
         
@@ -187,12 +202,9 @@
             </div>
         </div>
         <div id="resultsTab" class="fillpad" ng-show="!searchActive" style="width: 100%; height: 100%; min-height: 100%;">
-            <form name="frmResults" id="frmResults" method="GET" ng-submit="back()" class='fill'>
-                <div style="height: 10%;">
-                    {{ selectedValue }}
-                </div>
-                <div id='resultsList' class='fill' style="height: 80%;">
-                    <jqx-list-box id="jqxListBox" ng-model="titles" jqx-settings="listBoxSettings"/>
+            <form name="frmResults" id="frmResults" method="GET" ng-submit="back()" style="height: 90%;">
+                <div id='resultsList' class='fill' style="height: 90%;">
+                    <jqx-list-box id="jqxListBox" ng-model="titles" jqx-settings="listBoxSettings"></jqx-list-box>
                 </div>
                <div class="row top-buffer">
                     <div class="inner offset-3 col-6" style="margin-top: 10px; height: 10%;">

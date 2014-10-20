@@ -32,15 +32,17 @@ var keywords = [
     'Sports & Recreation', 'Technology',
     'Veterans & Military Families'];
 
-$('#search .typeahead').typeahead({
-    hint: true,
-    highlight: true,
-    minLength: 1
-},
-{
-    name: 'keywords',
-    displayKey: 'value',
-    source: substringMatcher(keywords)
-});
+function initTypeahead() {
+    $('#search .typeahead').typeahead({
+        hint: true,
+        highlight: true,
+        minLength: 1
+    },
+    {
+        name: 'keywords',
+        displayKey: 'value',
+        source: substringMatcher(keywords)
+    });
+}
 
 
