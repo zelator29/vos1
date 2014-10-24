@@ -103,7 +103,6 @@ div > img {
     font-weight: normal;
     margin-top: 3px;
     margin-bottom: 3px;
-    color: black;
 } 
 
 .copyright {
@@ -200,9 +199,16 @@ html, body {
     min-height:100%;
 }
 
+.jqx-listitem-state-hover-bootstrap, 
+.jqx-listitem-state-selected-bootstrap,
 .jqx-widget, btn {
     font-family: Rockwell;
-}    
+}
+
+.address {
+    color: darkslateblue;
+}
+
 .device-android {
     margin: 10px;
     width: 383px; 
@@ -222,3 +228,5 @@ html, body {
     overflow: hidden;  
     background-color: white;
 }
+
+

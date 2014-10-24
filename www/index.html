@@ -45,12 +45,14 @@
                 $scope.searchActive = false;
                 $scope.data = angular.fromJson(testData);
                 $scope.titles = [];
+                $scope.opportunity = null;
                 
                 for (var i = 0; i < $scope.data.items.length; i++) {
                     $scope.titles.push($scope.data.items[i].title);
                 }
-                $scope.selectedValue = $scope.titles[0];                
                 
+                $scope.selectedValue = $scope.titles[0];                
+
                 $scope.submit = function() {
                     console.log("Submit!  " + $scope.searchActive);
 
@@ -65,11 +67,10 @@
                 
                $scope.listBoxSettings =
                 {
-                    enableHover: false,
                     theme: 'bootstrap',
                     width: '100%',
                     height: '100%',
-                    itemHeight: 60,
+                    itemHeight: -1,
                     source: $scope.titles
                 };
 
@@ -78,14 +79,9 @@
                 }});
 
                 $scope.renderer = function(index, label, value) {
-/*
-                    if (!isNumeric(index)) {
-                        return '<span>???</span>';
-                    }
-*/
                     var item = $scope.data.items[index];
                     var table = 
-                        '<table style="width: 280px;">' + 
+                        '<table style="width: 280px;" class="renderedRow">' + 
                             '<tr>' +
                                 '<td rowspan="3" style="width: 30px;">' + 
                                 '<span class="glyphicon glyphicon-heart" style="margin-left: 4px;"></span>' +
@@ -93,15 +89,18 @@
                                 '<td rowspan="2" style="white-space: normal;">' + item.title + '</td>' +
                             '</tr><tr></tr>' + 
                             '<tr>' + 
-                                '<td rowspan="1"><b>' + 
+                                '<td rowspan="1">' + 
                                     item.city + ', ' + item.region.toUpperCase() +
                                     ' ' + item.postalCode + 
-                                '</b></td>' +
+                                '</td>' +
                             '</tr>' + 
                         '</table>';
                     return table;                    
                 };
         
+                $('#jqxListBox').on('select', function (event) {
+                    $('#drillin').removeAttr("disabled", "disabled");
+                });
         
                 /*
                 var query = "http://api2.allforgood.org/api/volopps?key=hoc0016-mobile&type=all&merge=0&output=json-hoc&vol_loc=15222&vol_dist=5&callback=JSON_CALLBACK";
@@ -204,12 +203,17 @@
         <div id="resultsTab" class="fillpad" ng-show="!searchActive" style="width: 100%; height: 100%; min-height: 100%;">
             <form name="frmResults" id="frmResults" method="GET" ng-submit="back()" style="height: 90%;">
                 <div id='resultsList' class='fill' style="height: 90%;">
-                    <jqx-list-box id="jqxListBox" ng-model="titles" jqx-settings="listBoxSettings"></jqx-list-box>
+                    <jqx-list-box id="jqxListBox" ng-model="selectedItem" jqx-settings="listBoxSettings"></jqx-list-box>
                 </div>
                <div class="row top-buffer">
-                    <div class="inner offset-3 col-6" style="margin-top: 10px; height: 10%;">
+                    <div class="inner col-6" style="margin-top: 10px; height: 10%;">
                         <button id="return"  class="btn btn-warning form-control" type="submit">
                         <span class="glyphicon glyphicon-arrow-left"></span> Back to Search
+                        </button>
+                    </div>
+                    <div class="inner col-6" style="margin-top: 10px; height: 10%;">
+                        <button id="drillin"  class="btn btn-primary form-control" type="submit" disabled>
+                        <span class="glyphicon glyphicon-info-sign"></span> More Info
                         </button>
                     </div>
                 </div>
