@@ -25,6 +25,7 @@
         <script src="js/jqwidgets/jqxangular.js"></script>
         <script src="js/jqwidgets/scripts/demos.js"></script>
         <script src="js/matcher.js"></script>
+        <script src="js/moment/moment.js"></script>
         <script src="js/test-data.js"></script>
 
         <script>
@@ -42,7 +43,8 @@
                 $scope.toDate;
                 $scope.zip;
                 $scope.distance;
-                $scope.searchActive = false;
+                $scope.searchActive = true;
+                $scope.drillActive = false;
                 $scope.data = angular.fromJson(testData);
                 $scope.titles = [];
                 $scope.opportunity = null;
@@ -51,21 +53,33 @@
                     $scope.titles.push($scope.data.items[i].title);
                 }
                 
-                $scope.selectedValue = $scope.titles[0];                
-
+                $scope.selectedValue = $scope.titles[0];      
+                
                 $scope.submit = function() {
-                    console.log("Submit!  " + $scope.searchActive);
-
+                    console.log('Submit!');
+                };
+                
+                $(document).ready(function () {
+                    $scope.home();
+                });
+ 
+                $scope.home = function() {
+                    $scope.searchActive = true;
+                    $scope.drillActive = false;
+                };
+                
+                $scope.search = function() {
                     $scope.searchActive = false;
+                    $scope.drillActive = false;
                     //doQuery();
                 };
-                
-                $scope.back = function() {
-                    $scope.searchActive = true;
-                    console.log("Back!   " + $scope.searchActive);
+
+                $scope.drill = function() {
+                    $scope.searchActive = false;
+                    $scope.drillActive = true;
                 };
-                
-               $scope.listBoxSettings =
+
+                $scope.listBoxSettings =
                 {
                     theme: 'bootstrap',
                     width: '100%',
@@ -74,20 +88,28 @@
                     source: $scope.titles
                 };
 
-                $('#jqxListBox').jqxListBox({renderer: function(index, label, value) {
+               $('#jqxListBox').jqxListBox({renderer: function(index, label, value) {
                     return $scope.renderer(index, label, value);
                 }});
 
                 $scope.renderer = function(index, label, value) {
                     var item = $scope.data.items[index];
+                    var startDate = moment(item.startDate);
+                    var endDate = moment(item.endDate);
                     var table = 
                         '<table style="width: 280px;" class="renderedRow">' + 
                             '<tr>' +
-                                '<td rowspan="3" style="width: 30px;">' + 
+                                '<td rowspan="4" style="width: 30px;">' + 
                                 '<span class="glyphicon glyphicon-heart" style="margin-left: 4px;"></span>' +
                                 '</td>' +
                                 '<td rowspan="2" style="white-space: normal;">' + item.title + '</td>' +
-                            '</tr><tr></tr>' + 
+                            '</tr><tr></tr>' +
+                            '<tr>'+
+                                '<td rowspan="1">' + 
+                                    startDate.format("MMMM Do YYYY") + ' - ' +
+                                    endDate.format("MMMM Do YYYY") +
+                                '</td>' +
+                            '</tr>' + 
                             '<tr>' + 
                                 '<td rowspan="1">' + 
                                     item.city + ', ' + item.region.toUpperCase() +
@@ -122,12 +144,12 @@
                 }
                 
                 function querySuccess(data) {
-                    $scope.searchActive = false;
+                    //$scope.searchActive = false;
                     alert('Success!');
                 };
 
                 function queryFailure(status) {
-                    $scope.searchActive = true;
+                    //$scope.searchActive = true;
                     alert('Failure: ' + status);
                 };
             };
@@ -136,90 +158,103 @@
     </head>
 
     <body ng-app="VOS1" ng-controller="searchController">
-        <div id="demoContainer" class="device-android">
-        <div id="container" class="device-android-container">
-        <div id="searchTab" ng-show="searchActive" style="background: white;">
-            <div class="text-center title-wrapper">
-                <h2 class="page-title">Pittsburgh Cares</h2>
-                <h3 class="page-subtitle">Fill in the fields below and hit</h3>
-                <h3 class="page-subtitle"> 'Search' to find opportunities</h3>
-                <div class='top-buffer'></div>
-            </div>
+    <div id="demoContainer" class="device-android">
+        <div id="searchContainer" ng-hide="drillActive" class="device-android-container">
+            <div id="searchTab" ng-show="searchActive" style="background: white;">
+                <div class="text-center title-wrapper">
+                    <h2 class="page-title">Pittsburgh Cares</h2>
+                    <h3 class="page-subtitle">Fill in the fields below and hit</h3>
+                    <h3 class="page-subtitle"> 'Search' to find opportunities</h3>
+                    <div class='top-buffer'></div>
+                </div>
 
-            <div class="container-fluid">
-               <form name="frmSearch" id="frmSearch" method="GET" ng-submit="submit()">
-                    <div class="row top-buffer">
-                        <div class="inner col-12" id="search">
-                            <input type="text" class="form-control typeahead" 
-                                   ng-model="terms"
-                                   placeholder="Keyword or area of interest">
+                <div class="container-fluid">
+                   <form name="frmSearch" id="frmSearch" method="GET">
+                        <div class="row top-buffer">
+                            <div class="inner col-12" id="search">
+                                <input type="text" class="form-control typeahead" 
+                                       ng-model="terms"
+                                       placeholder="Keyword or area of interest">
+                            </div>
                         </div>
+                        <div class="row top-buffer">
+                            <div class="inner col-6">
+                                <input type="text" class="form-control" 
+                                       data-provide="datepicker"
+                                       ng-model="fromDate"
+                                       id="from-date" placeholder="From this date">
+                            </div>
+                            <div class="inner col-6">
+                                <input type="text" class="form-control" 
+                                       data-provide="datepicker"
+                                       ng-model="toDate"
+                                       id="to-date" placeholder="To this date">
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="inner col-6">
+                                <input type="text" class="form-control" 
+                                       ng-model="zip"
+                                       id="zip-code" placeholder="Enter ZIP code">
+                            </div>
+                            <div class="inner col-6">
+                                <input type="text" class="form-control" 
+                                       ng-model="distance"
+                                       id="distance" placeholder="Distance">
+                            </div>
+                        </div>
+                        <div class="row top-buffer"></div>
+                        <div class="row top-buffer">
+                            <div class="inner offset-4 col-4" style="margin-top: 30px;">
+                                <button id="go"  class="btn btn-primary form-control" ng-click='search()' type="submit">
+                                    Search<span class="glyphicon glyphicon-search" style="margin-left: 12px;"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <img class="unselectable" src="img/pghcareslogo.png" alt="Pittsburgh Cares">
+                    <h3 class="page-subtitle top-buffer">Pittsburgh Cares</h3>
+                    <h4 class="address">3505 Butler St.</h4>
+                    <h4 class="address">Pittsburgh, PA 15201</h4>
+                    <h4 class="address">(412) 471-2114</h4>
+                    <h5 class="copyright">&copy;2014 - All Rights Reserved</h5>
+                </div>
+            </div>
+            <div id="listTab" class="fillpad" ng-hide="searchActive" style="width: 100%; height: 100%; min-height: 100%;">
+                <form name="frmList" id="frmList" method="GET" style="height: 90%;">
+                    <div id='resultsList' class='fill' style="height: 90%;">
+                        <jqx-list-box id="jqxListBox" ng-model="selectedItem" jqx-settings="listBoxSettings"></jqx-list-box>
                     </div>
-                    <div class="row top-buffer">
-                        <div class="inner col-6">
-                            <input type="text" class="form-control" 
-                                   data-provide="datepicker"
-                                   ng-model="fromDate"
-                                   id="from-date" placeholder="From this date">
+                   <div class="row top-buffer">
+                        <div class="inner col-6" style="margin-top: 10px; height: 10%;">
+                            <button id="return"  class="btn btn-warning form-control" type="submit" ng-click='home()'>
+                            <span class="glyphicon glyphicon-arrow-left"></span> Back to Search
+                            </button>
                         </div>
-                        <div class="inner col-6">
-                            <input type="text" class="form-control" 
-                                   data-provide="datepicker"
-                                   ng-model="toDate"
-                                   id="to-date" placeholder="To this date">
-                        </div>
-                    </div>
-                    <div class="row top-buffer">
-                        <div class="inner col-6">
-                            <input type="text" class="form-control" 
-                                   ng-model="zip"
-                                   id="zip-code" placeholder="Enter ZIP code">
-                        </div>
-                        <div class="inner col-6">
-                            <input type="text" class="form-control" 
-                                   ng-model="distance"
-                                   id="distance" placeholder="Distance">
-                        </div>
-                    </div>
-                    <div class="row top-buffer"></div>
-                    <div class="row top-buffer">
-                        <div class="inner offset-4 col-4" style="margin-top: 30px;">
-                            <button id="go"  class="btn btn-primary form-control" type="submit">
-                                Search<span class="glyphicon glyphicon-search" style="margin-left: 12px;"></span>
+                        <div class="inner col-6" style="margin-top: 10px; height: 10%;">
+                            <button id="drillin"  class="btn btn-primary form-control" type="submit" ng-click="drill()" disabled>
+                            <span class="glyphicon glyphicon-info-sign"></span> More Info
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
-            <div>
-                <img class="unselectable" src="img/pghcareslogo.png" alt="Pittsburgh Cares">
-                <h3 class="page-subtitle top-buffer">Pittsburgh Cares</h3>
-                <h4 class="address">3505 Butler St.</h4>
-                <h4 class="address">Pittsburgh, PA 15201</h4>
-                <h4 class="address">(412) 471-2114</h4>
-                <h5 class="copyright">&copy;2014 - All Rights Reserved</h5>
+        </div>
+        <div id ="resultsContainer" ng-show="drillActive" class="device-android-container">
+            <div id="resultsTab" class="fillpad" >
+                <div id='resultPanel' class='fillpad' style="height: 90%; min-height: 95%; background-color: blue;">
+                </div>
+                <div class="row top-buffer">
+                    <div class="inner offset-3 col-6" style="margin-top: 10px; height: 10%;">
+                        <button id="drillout"  class="btn btn-primary form-control" type="submit" ng-click='search()'>
+                        <span class="glyphicon glyphicon-arrow-left"></span> Back to List
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="resultsTab" class="fillpad" ng-show="!searchActive" style="width: 100%; height: 100%; min-height: 100%;">
-            <form name="frmResults" id="frmResults" method="GET" ng-submit="back()" style="height: 90%;">
-                <div id='resultsList' class='fill' style="height: 90%;">
-                    <jqx-list-box id="jqxListBox" ng-model="selectedItem" jqx-settings="listBoxSettings"></jqx-list-box>
-                </div>
-               <div class="row top-buffer">
-                    <div class="inner col-6" style="margin-top: 10px; height: 10%;">
-                        <button id="return"  class="btn btn-warning form-control" type="submit">
-                        <span class="glyphicon glyphicon-arrow-left"></span> Back to Search
-                        </button>
-                    </div>
-                    <div class="inner col-6" style="margin-top: 10px; height: 10%;">
-                        <button id="drillin"  class="btn btn-primary form-control" type="submit" disabled>
-                        <span class="glyphicon glyphicon-info-sign"></span> More Info
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        </div>
-        </div>
+    </div>
     </body>
 </html>
