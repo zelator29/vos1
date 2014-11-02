@@ -71,7 +71,7 @@
                 $scope.search = function() {
                     $scope.searchActive = false;
                     $scope.drillActive = false;
-                    //doQuery();
+                    doQuery();
                 };
 
                 $scope.drill = function() {
@@ -120,13 +120,18 @@
                     return table;                    
                 };
         
-                $('#jqxListBox').on('select', function (event) {
+                $('#jqxListBox').on('select', function () {
                     $('#drillin').removeAttr("disabled", "disabled");
                 });
         
-                /*
-                var query = "http://api2.allforgood.org/api/volopps?key=hoc0016-mobile&type=all&merge=0&output=json-hoc&vol_loc=15222&vol_dist=5&callback=JSON_CALLBACK";
-                $http.jsonp(query).
+                $scope.$watch('terms', function() {
+                    alert($scope.terms);
+                });
+        
+                function doQuery() {
+/*                    
+                    var query = "http://api2.allforgood.org/api/volopps?key=hoc0016-mobile&type=all&merge=0&output=json-hoc&vol_loc=15222&vol_dist=5";
+                    $http.get(query).
                         success(function(data, status, headers, config) {
                             querySuccess(data);
                         }).
@@ -137,7 +142,8 @@
                             console.log('config:' + config);
                             queryFailure(status);
                         });
-                */
+*/                       
+                }
         
                 function isNumeric(n) {
                     return !isNaN(parseFloat(n)) && isFinite(n);

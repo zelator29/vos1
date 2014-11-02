@@ -1,25 +1,36 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
+<!doctype html>
+<html ng-app="ui.bootstrap.demo">
     <head>
-        <title>TODO supply a title</title>
+        <title>Title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
+        <script src="js/example.js"></script>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+        </style>
     </head>
     <body>
-        <table style="width: 200px" border="1">
-          <tr>
-            <td rowspan="3">XXX</td>
-            <td rowspan="2" style="white-space: normal">111 222 333 444 555 666 777</td>
-          </tr>
-          <TR></tr>
-          <tr>
-            <td>111</td>
-          </tr>
-        </table>
+       
+        
+        <script type="text/ng-template" id="customTemplate.html">
+        <a>
+            <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16">
+            <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+        </a>
+        </script>
+        
+        
+        <div class="container-fluid" ng-controller="TypeaheadCtrl">
+        <h4>Static arrays</h4>
+        <pre>Model: {{selected}}</pre> 
+        <input type="text" ng-model="selected" 
+               typeahead="fruit for fruit in fruits | filter:$viewValue | limitTo:4" class="form-control">
+            <p class="form-control" style="margin-top: 30px;">{{selected}}</p>
+        </div>
+
+
     </body>
 </html>
