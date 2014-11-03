@@ -22,6 +22,7 @@
         <script src="js/jqwidgets/jqxbuttons.js"></script>
         <script src="js/jqwidgets/jqxscrollbar.js"></script>
         <script src="js/jqwidgets/jqxlistbox.js"></script>
+        <script src="js/jqwidgets/jqxtabs.js"></script>
         <script src="js/jqwidgets/jqxangular.js"></script>
         <script src="js/jqwidgets/scripts/demos.js"></script>
         <script src="js/matcher.js"></script>
@@ -123,11 +124,26 @@
                 $('#jqxListBox').on('select', function () {
                     $('#drillin').removeAttr("disabled", "disabled");
                 });
-        
+
+                // When an opportunity is selected, update
+                // the opportunity in the model
+                $('#jqxListBox').on('change', function (event) {
+                    var args = event.args;
+                    if (args) {
+                        var index = args.index;
+                        $scope.opportunity = $scope.data.items[index];
+                    }
+                });
+                
+                $(document).ready(function () {
+                    $('#jqxTabs').jqxTabs();
+                });
+
+/*
                 $scope.$watch('terms', function() {
                     alert($scope.terms);
                 });
-        
+*/        
                 function doQuery() {
 /*                    
                     var query = "http://api2.allforgood.org/api/volopps?key=hoc0016-mobile&type=all&merge=0&output=json-hoc&vol_loc=15222&vol_dist=5";
@@ -250,7 +266,22 @@
         </div>
         <div id ="resultsContainer" ng-show="drillActive" class="device-android-container">
             <div id="resultsTab" class="fillpad" >
-                <div id='resultPanel' class='fillpad' style="height: 90%; min-height: 95%; background-color: blue;">
+                <div id='resultPanel' class='fillpad' style="height: 90%; min-height: 95%;">
+                    <div class="form-control" style="height: 18%; padding: 5px; font-size: 16px; background-color: #2481d8; color: white;">
+                        {{opportunity.title}}
+                    </div>
+                    <div id="jqxTabs" class="form-control" style="height: 82%; padding: 5px; font-size: 16px;">
+                        <ul>
+                            <li>Description</li>
+                            <li>Scheduling</li>
+                        </ul>
+                        <div class="form-control" style="height: 100%;">
+                            {{opportunity.description}}...
+                        </div>
+                        <div>
+                            ???
+                        </div>
+                    </div>
                 </div>
                 <div class="row top-buffer">
                     <div class="inner offset-3 col-6" style="margin-top: 10px; height: 10%;">

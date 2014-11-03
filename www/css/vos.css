@@ -241,4 +241,11 @@ html, body {
     background-color: white;
 }
 
-
+.jqx-tabs-content-element
+{
+    height: 100%;
+    overflow: auto;
+    font-family: Rockwell;
+    font-size: 19px;
+    color: #2481d8;
+}
